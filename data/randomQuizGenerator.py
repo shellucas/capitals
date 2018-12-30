@@ -61,17 +61,44 @@ capitals_europe = {
 }
 
 # Generate 35 quiz files.
-for quizNum in range(20):
+for quiz in range(20):
 
-    #TODO: Create the quiz and answer key files
+    # TODO: Create the quiz and answer key files
     quizFile = open('capitalsquiz%s.txt' % (quiz + 1), 'w')
-    answerKeyFile = open('capitalquiz_answers%s.txt' % (quizNum + 1), 'w')
+    answerKeyFile = open('capitalquiz_answers%s.txt' % (quiz + 1), 'w')
 
     # Write out the header for the quiz.
-    
+    quizFile.write('Name:\n\nDate:\n\nPeriod:\n\n')
+    quizFile.write((' ' * 20) + 'Capitals Quiz (Form %s)' % (quiz + 1))
+    quizFile.write('\n\n')
 
-    #TODO: Shuffle the order of countries
+    # TODO: Shuffle the order of countries
+    countries = list(capitals_europe.keys())
+    random.shuffle(countries)
 
-    #TODO: Loop through all countries making a question for each
+    # TODO: Loop through all countries making a question for each
+    for question in range(len(countries)):
+        
+        # Get right and wrong answers
+        correctAnswer = capitals_europe[countries[question]]
+        wrongAnswers = list(capitals_europe.values())
+        del wrongAnswers[wrongAnswers.index(correctAnswer)]
+        wrongAnswers = random.sample(wrongAnswers, 3)
+        answerOptions = wrongAnswers + [correctAnswer]
+        random.shuffle(answerOptions)
+
+        # TODO: Write the question and answer options to the quiz file
+        quizFile.write('%s. What is the capital of %s?\n' % (question + 1,
+                                                             countries[question]))
+        for i in range(4):
+            quizFile.write('%s. %s\n' % ('ABCD'[i], answerOptions[i]))
+        quizFile.write('\n')
+
+        # TODO: Write the answer key to a file
+        answerKeyFile.write('%s. %s\n' % (question + 1, 'ABCD'[
+            answerOptions.index(correctAnswer)]))
+
+    quizFile.close()
+    answerKeyFile.close()
 
 
